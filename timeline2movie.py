@@ -33,7 +33,7 @@ import matplotlib.gridspec as gridspec
 image_dir = '/Users/jake/movieFiles/img_dir/'#The directory containing the images that need to be stitched together
 timeline_file = '/Users/jake/movieFiles/movie20190819.dat'#A file containing all of the information for the timeline
 outimg_dir = '/Users/jake/movieFiles/img_out/' #Warning! If cleanup is set to "True", then it is best to use a new, empty directory to avoid losing important data.
-output_movie = '/Users/jake/movieFiles/test191009.mp4' #Path of the output mp4 file
+output_movie = 'testMovie.mp4' #Path of the output mp4 file
 framerate = 24 #Framerate of movie in FPS. If tstretch == framerate, then movie represents 1Myr/s.
 tstretch = 24#increase the length of the movie by this factor (must be of type int!). If tstretch == 1, then 1 frame = 1Myr
 rotationPerMyr = 0.82#The speed of rotation of the LMC per Myr. Set to 0 if no rotation wanted
