@@ -128,9 +128,9 @@ def congrid(a, newdims, method='linear', centre=False, minusone=False,InterpGaps
     old = np.array( a.shape )
     ndims = len( a.shape )
     if len( newdims ) != ndims:
-        print "[congrid] dimensions error. " \
+        print ("[congrid] dimensions error. " \
               "This routine currently only support " \
-              "rebinning to the same number of dimensions."
+              "rebinning to the same number of dimensions.")
         return None
     newdims = np.asarray( newdims, dtype=float )
     dimlist = []
@@ -144,7 +144,7 @@ def congrid(a, newdims, method='linear', centre=False, minusone=False,InterpGaps
         newa = a[list( cd )]
         return newa
     elif method in ['nearest','linear']:
-        print 'nearest/linear method is very similar to average method. The average method does have access to some additional interpolation options though.'
+        print ('nearest/linear method is very similar to average method. The average method does have access to some additional interpolation options though.')
         # calculate new dims
         for i in range( ndims ):
             base = np.arange( newdims[i] )
@@ -212,12 +212,10 @@ def congrid(a, newdims, method='linear', centre=False, minusone=False,InterpGaps
                     out_array[1,i] = out_array[1,i] + P2[j]
                     count_array[i] = count_array[i] + 1
             out_array[1,i] = out_array[1,i] / count_array[i]
-        #print count_array, out_array[1,:]
         if InterpGaps ==True:
             out_array = InterpOverGaps(out_array, count_array, newdims, Interp1s)
         return out_array
     elif method in ['quadratureAdd']:
-        print 'Sorry, quadratureAdd is not yet implemented'
         P1, P2, out_array,binEdgeArray,count_array,binmin,binmax,stepsize = setupNewMethod(a,newdims)
         for j in range(len(binEdgeArray)):
             binEdgeArray[j] = binmin + (stepsize*j)
@@ -228,14 +226,13 @@ def congrid(a, newdims, method='linear', centre=False, minusone=False,InterpGaps
                     out_array[1,i] = np.sqrt(out_array[1,i]**2. + P2[j]**2.)
                     count_array[i] = count_array[i] + 1
             out_array[1,i] = out_array[1,i] / np.sqrt(count_array[i])
-        #print count_array, out_array[1,:]
         if InterpGaps ==True:
             out_array = InterpOverGaps(out_array, count_array, newdims, Interp1s)
         return out_array
     else:
-        print "Congrid error: Unrecognized interpolation type.\n", \
+        print ("Congrid error: Unrecognized interpolation type.\n", \
               "Currently only \'neighbour\', \'nearest\',\'linear\',", \
-              "and \'spline\' are supported."
+              "and \'spline\' are supported.")
         return None
 #Rebin PDF1 to the axis of PDF2
 def rebinPDF1toAxis2(PDF1, PDF2,method ='average',InterpGaps=True,Interp1s=False):
@@ -244,9 +241,6 @@ def rebinPDF1toAxis2(PDF1, PDF2,method ='average',InterpGaps=True,Interp1s=False
     out_array = np.zeros(targetdim)
     minB = np.min(PDF2[:,0])
     maxB = np.max(PDF2[:,0])
-    #print maxB
-    #print minB
-    #print targetdim
     stepsize = (maxB - minB) / targetdim[0]
     binEdgeArray = np.zeros(targetdim[0]+1)
     binEdgeArray[0] = minB
@@ -263,7 +257,6 @@ def rebinPDF1toAxis2(PDF1, PDF2,method ='average',InterpGaps=True,Interp1s=False
         count_array = np.zeros(targetdim[0])
         for i in range(targetdim[0]):
             out_array[i,0] = PDF2[i,0]
-        #print out_array[:,0]
         for i in range(targetdim[0]):
             for j in range(inputdim[0]):
                 if (PDF1[j,0] >= binEdgeArray[i]) and (PDF1[j,0] <= binEdgeArray[i+1]):
@@ -272,16 +265,14 @@ def rebinPDF1toAxis2(PDF1, PDF2,method ='average',InterpGaps=True,Interp1s=False
                     count_array[i] = count_array[i] + 1
             out_array[i,1] = out_array[i,1] / count_array[i]
             out_array[i,2] = out_array[i,2] / count_array[i]
-        #print count_array
-        #out_array = np.nan_to_num(out_array)
         if InterpGaps ==True:
             out_array = InterpOverGaps(out_array, count_array, newdims, Interp1s)
         return out_array
     elif method in ['quadratureAdd']:
-        print 'quadratureAdd not yet implemented'
+        print ('quadratureAdd not yet implemented')
         return None
     else:
-        print 'rebin error: method not recognised'
+        print ('rebin error: method not recognised')
         return None
 #Puts PDFs in same axis and multiplys them
 def multiplyPDFs(PDF1, PDF2,method ='average',InterpGaps=True,Interp1s=True):
@@ -316,28 +307,21 @@ def getFWHM(FWHM_array):
         elif FWHM_array[i,1] < half_maxmult:
             halfmax_hi = (FWHM_array[i-1,0] + FWHM_array[i,0]) / 2.
             go = 1
-            #print halfmax_hi, FWHM_array[0,i-1], FWHM_array[0,i]
-            #print halfmax_hi, FWHM_array[1,i-1], FWHM_array[1,i]
         else:
             i = i+1
 
     return (halfmax_hi-halfmax_lo), halfmax_lo, halfmax_hi
 def calcCorrelationCoef(PDF1,PDF2,mode='simple'):
-    #figcalcCorrelationCoef = plt.figure()
-    #axcalcCorrelationCoef = plt.gca()
     if mode in ['simple']:
         tau, p_value = ss.kendalltau(PDF1[1,:],PDF2[1,:])
         wtaur, wtp = ss.weightedtau(PDF2[1,:],PDF1[1,:],rank=None)
         pr, prp = ss.pearsonr(PDF1[1,:],PDF2[1,:])
-        print tau
-        print wtaur
-        print pr
-        #plt.show()
+        print (tau)
+        print (wtaur)
+        print (pr)
         return wtaur
     elif mode in ['complex','complex1']: #In complex mode, we will define the correlation coefficient as the degree to which the observations conform to the expectation
         rcorr = np.zeros(len(PDF1[1,:]))
-        #outgrad = np.gradient(np.array([PDF1[1,:],PDF2[1,:]]))
-        #print outgrad
         def expectation(x):
             return x #i.e. as we are measuring the same quantity, we expect that the PDFs should follow a 1:1 relationship in the absence of bias or poor sampling
         for i in range(len(PDF1[1,:])):
@@ -345,7 +329,7 @@ def calcCorrelationCoef(PDF1,PDF2,mode='simple'):
                 rcorr[i] = PDF2[1,i] / expectation(PDF1[1,i])
             else:
                 rcorr[i] =  expectation(PDF1[1,i]) / PDF2[1,i]
-        print rcorr
+        print (rcorr)
         return rcorr
     elif mode in ['gradient','gradient_avg']:
         rcorr = np.zeros(len(PDF1[1,:]))
@@ -359,7 +343,7 @@ def calcCorrelationCoef(PDF1,PDF2,mode='simple'):
             elif (i >=(len(PDF1[1,:]) - stretchlength)):
                 measgrad = (PDF2[1,i] - PDF2[1,i-1]) / (PDF1[1,i]-PDF1[1,i-1])
             else:
-                print "something unexpected has occured"
+                print ("something unexpected has occured")
             if measgrad > expectedGradient:
                 rcorr[i] = expectedGradient / measgrad
             else:
@@ -367,13 +351,12 @@ def calcCorrelationCoef(PDF1,PDF2,mode='simple'):
         if mode in ['gradient']:
             return rcorr
         elif mode in ['gradient_avg']:
-            #print rcorr
             return np.median(np.nan_to_num(rcorr))
         else:
-            print 'something has gone wrong'
+            print ('something has gone horribly wrong')
             return None
     else:
-        print 'mode does not exist'
+        print ('mode does not exist')
 def getybest(alpha_array,y_array):
     y = 0.
     for i in range(len(alpha_array)):
@@ -389,13 +372,12 @@ def getybestalog(alpha_array,y_array):
 
 def MinimiseSigma(E,Nvals,Ntry):
     minsig = 10000. #some Arbitrary high number
-    print 'calculating best weights...'
+    print('calculating best weights...')
     for i in range(Ntry):
         alphatry = np.zeros(Nvals)
         for j in range(Nvals):
             alphatry = np.random.uniform(low=0.,high=1.0,size=len(alphatry))
         alphatry = 1.0 / np.sum(alphatry) * alphatry
-        #print alphatry
         sigma2 = CalcSigma2(E,Nvals,Nstep,alphatry)
         if sigma2 < minsig:
             minsig = sigma2
@@ -455,15 +437,14 @@ def dealWithANaN(i,ab,j,data_array_regrid):
 def main():
     input_files_list = listdir(input_dir)
     NPDF = len(input_files_list)
-    #print NPDF
-    print input_files_list[0]
+    print (input_files_list[0])
     datatemp = np.genfromtxt((str(input_dir+input_files_list[0])),dtype=float,delimiter='       ',skip_header=nComments)
     datashape = np.shape(datatemp)
     datatemp = None
     data_array = np.empty((datashape[0],datashape[1],NPDF))
     for i in range(NPDF):
         fullpath = str(input_dir + input_files_list[i])
-        print input_files_list[i]
+        print (input_files_list[i])
         data = np.genfromtxt(fullpath,dtype=float,delimiter='       ',skip_header=nComments)
         data_array[:,:,i] = data
     #Step 2: Regrid all PDFs to same axis
@@ -506,15 +487,15 @@ def main():
             FWHM_mult, FWHM_lo,FWHM_hi = getFWHM(inpFWHM) #Need proper input
             ErrHI = 0.741*(FWHM_hi-modeValue)
             ErrLO = 0.741*(modeValue-FWHM_lo)
-            print 10**modeValue, '+/-', 10**(ErrHI+modeValue)-10**modeValue,'/', 10**modeValue-10**(modeValue-ErrLO)
+            print (10**modeValue, '+/-', 10**(ErrHI+modeValue)-10**modeValue,'/', 10**modeValue-10**(modeValue-ErrLO))
         else:
             ErrHI = np.log10(uncertaintiesHigh[i])
             ErrLO = np.log10(uncertaintiesLow[i])
             modeValue = data_array_regrid[np.argmax(np.nan_to_num(PDF1[1,:])),0,1]
         inpErrorArray[i] = np.sqrt(10**ErrHI+10**ErrLO) / 10**modeValue#geometric average of ErrHI and ErrLO divided by modeValue
 
-    print 'realtive error array:'
-    print inpErrorArray
+    print ('realtive error array:')
+    print (inpErrorArray)
 
     #Step 4b: Construct the matrix:
     E = np.zeros((NPDF,NPDF))
@@ -524,7 +505,7 @@ def main():
                 E[i,j] = inpErrorArray[i]**2.
             else:
                 E[i,j] = rmatrix[i,j]*inpErrorArray[i]*inpErrorArray[j]
-    print E
+    print (E)
     #Step 5: Determine 'best' values for alpha array by minising sigma
     bestalphavalues, bestSigma = MinimiseSigma(E,NPDF,Nstep)
     if ForceEqualWeighting:
@@ -532,12 +513,12 @@ def main():
             bestalphavalues[i] = 1. / len(bestalphavalues)
     if ForceCustomWeighting:
         bestalphavalues = CusomWeighting
-    print bestalphavalues
-    print bestSigma
+    print (bestalphavalues)
+    print (bestSigma)
 
     #Step 6: Calculate best timescale PDF
     size = np.shape(data_array[:,:,0])
-    print size[0]
+    print (size[0])
     outPDF = np.zeros(size[0])
     finalPDF = np.zeros((3,size[0]))
     for i in range(size[0]):
@@ -579,7 +560,7 @@ def main():
     coefflow, var_matrixlow = curve_fit(gauss, PDFlowX,PDFlow, p0=p0)
     coeffhigh, var_matrixhigh = curve_fit(gauss, PDFhighX,PDFhigh, p0=p0)
 
-    print 't = ', 10**np.mean([coefflow[1],coeffhigh[1]]), ' +/- ', (10**(coeffhigh[1]+coeffhigh[2])-10**(coeffhigh[1])), '/', (10**(coefflow[1]-coefflow[2])-10**(coefflow[1])), ' Myr'
+    print ('t = ', 10**np.mean([coefflow[1],coeffhigh[1]]), ' +/- ', (10**(coeffhigh[1]+coeffhigh[2])-10**(coeffhigh[1])), '/', (10**(coefflow[1]-coefflow[2])-10**(coefflow[1])), ' Myr')
 
     # Get the fitted curve
     hist_fitlow = gauss(data_array_regrid[:,0,0], *coefflow)
