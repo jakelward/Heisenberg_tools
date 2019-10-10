@@ -1,11 +1,11 @@
 import numpy as np
-#theoreticalCloudTimescales v0.2
+#theoreticalCloudTimescales v0.3
 #A collection of functions to implement the general theory of molecular cloud lifetimes of Jeffreson & Kruijssen (2018)
 #The aim here is to provide a set of simple python functions for predicting mean molecular (and atomic) cloud lifetimes
 #For maximum accessability all functions only require numpy as a pre-requisite.
-#Note that the current script will run on python 2.7 ONLY (tested on python 2.7.14). A python3 version is on the way.
-#If you have any issues, please let me know at https://github.com/JLWard-90/Heisenberg_tools and I'll see what I can do.
-#For usage see the example script "predict_timescales.py"
+#Note that the current script has been tested on python 2.7.14. and python 3.6.6
+#If you have any problems, please raise an issue at https://github.com/JLWard-90/Heisenberg_tools and I'll see what I can do.
+#For usage see the example script "predict_timescales_example.py"
 
 def G():
     return 4.30091E-3 #In pc / M_o (km/s)^2 ~ pc / M_o (pc/Myr)^2
@@ -13,7 +13,7 @@ def G():
 def combineTimescales(timescales,printTimes=False):
     t_out_inv = 0.
     if printTimes == True:
-        print timescales
+        print(timescales)
     for t in timescales:
         t_out_inv = t_out_inv + (1./t)
     tout = np.abs(1. / t_out_inv)
@@ -91,7 +91,7 @@ def calculateGalaxyWideTimescale(fg, V_array, R_array, surface_density_star, sur
 #When calculating a single galactic average, set include_edges = False, when plotting timescales as a function of radius, set to True.
 def SetupBins(R_array, V_array, binwidth=1000.0, maximum=4000., minimum=0., include_edges=True): #Bin width, maximum, and minimum in pc
     if(np.max(R_array) < 100):
-        print "Guessing that radius values are in kpc. Converting to pc..."
+        print ("Guessing that radius values are in kpc. Converting to pc...")
         R_array *= 1000.
     maxR = np.max(R_array) - (np.max(R_array) % binwidth)
     if maxR > maximum:
@@ -164,8 +164,8 @@ def freeFallTimePerBin(V_array, R_array,sigma_star,sigma_gas,veldisp_star,veldis
             elif length_sigma == len(shearArray)+1:
                 sgas = (sigma_gas[i]+sigma_gas[i+1]) / 2. #if it has a length of that of the shear array then we assume that it is in the same format as R_array and V_array. If so we take an average of the values surrounding the one that we actually want.
             else:
-                print "Error encountered in freeFallTimePerBin: Gas surface density array (sigma_gas) is wrong length. length must equal len(shearArray) or len(shearArray)+1"
-                print "len(sigma_gas) =  ", length_sigma
+                print ("Error encountered in freeFallTimePerBin: Gas surface density array (sigma_gas) is wrong length. length must equal len(shearArray) or len(shearArray)+1")
+                print ("len(sigma_gas) =  ", length_sigma)
         else:
             sgas = sigma_gas #If there is only a single surface density measurement then we will use that
 
@@ -175,8 +175,8 @@ def freeFallTimePerBin(V_array, R_array,sigma_star,sigma_gas,veldisp_star,veldis
             elif length_sigma_star == len(shearArray) +1:
                 sstar = (sigma_star[i] + sigma_star[i+1]) / 2.
             else:
-                print "Error encountered in freeFallTimePerBin: Stellar surface density array (sigma_star) is wrong length. length must equal len(shearArray) or len(shearArray)+1"
-                print "len(sigma_gas) =  ", length_sigma_star
+                print ("Error encountered in freeFallTimePerBin: Stellar surface density array (sigma_star) is wrong length. length must equal len(shearArray) or len(shearArray)+1")
+                print ("len(sigma_gas) =  ", length_sigma_star)
         else:
             sstar = sigma_star     
         if veldispstar_is_array == True:
@@ -185,8 +185,8 @@ def freeFallTimePerBin(V_array, R_array,sigma_star,sigma_gas,veldisp_star,veldis
             elif length_veldisp_star == len(shearArray)+1:
                 vd_star = (veldisp_star[i] + veldisp_star[i+1]) / 2.
             else:
-                print "Error encountered in freeFallTimePerBin: Stellar velocity dispersion array (veldisp_star) is wrong length. length must equal len(shearArray) or len(shearArray)+1"
-                print "len(sigma_gas) =  ", length_veldisp_star
+                print ("Error encountered in freeFallTimePerBin: Stellar velocity dispersion array (veldisp_star) is wrong length. length must equal len(shearArray) or len(shearArray)+1")
+                print ("len(sigma_gas) =  ", length_veldisp_star)
         else:
             vd_star = veldisp_star
         
@@ -196,8 +196,8 @@ def freeFallTimePerBin(V_array, R_array,sigma_star,sigma_gas,veldisp_star,veldis
             elif length_veldisp_gas == len(shearArray)+1:
                 vd_gas = (veldisp_gas[i] + veldisp_gas[i+1]) / 2.
             else:
-                print "Error encountered in freeFallTimePerBin: Gas velocity dispersion array (veldisp_gas) is wrong length. length must equal len(shearArray) or len(shearArray)+1"
-                print "len(sigma_gas) =  ", length_veldisp_gas
+                print ("Error encountered in freeFallTimePerBin: Gas velocity dispersion array (veldisp_gas) is wrong length. length must equal len(shearArray) or len(shearArray)+1")
+                print ("len(sigma_gas) =  ", length_veldisp_gas)
         else:
             vd_gas = veldisp_gas
         #Calculate the free-fall timescale:
@@ -230,8 +230,8 @@ def couclcloudCollisionTimePerBin(veldisp_gas,sigma_gas,R_array,V_array,fg):
             elif length_sigma == len(shearArray)+1:
                 sgas = (sigma_gas[i]+sigma_gas[i+1]) / 2. #if it has a length of that of the shear array then we assume that it is in the same format as R_array and V_array. If so we take an average of the values surrounding the one that we actually want.
             else:
-                print "Error encountered in cloudcloudCollisionTimePerBin: Gas surface density array (sigma_gas) is wrong length. length must equal len(shearArray) or len(shearArray)+1"
-                print "len(sigma_gas) =  ", length_sigma
+                print ("Error encountered in cloudcloudCollisionTimePerBin: Gas surface density array (sigma_gas) is wrong length. length must equal len(shearArray) or len(shearArray)+1")
+                print ("len(sigma_gas) =  ", length_sigma)
         else:
             sgas = sigma_gas #If there is only a single surface density measurement then we will use that
         if veldispgas_is_array == True:
@@ -240,8 +240,8 @@ def couclcloudCollisionTimePerBin(veldisp_gas,sigma_gas,R_array,V_array,fg):
             elif length_veldisp_gas == len(shearArray)+1:
                 vd_gas = (veldisp_gas[i] + veldisp_gas[i+1]) / 2.
             else:
-                print "Error encountered in freeFallTimePerBin: Gas velocity dispersion array (veldisp_gas) is wrong length. length must equal len(shearArray) or len(shearArray)+1"
-                print "len(sigma_gas) =  ", length_veldisp_gas
+                print ("Error encountered in freeFallTimePerBin: Gas velocity dispersion array (veldisp_gas) is wrong length. length must equal len(shearArray) or len(shearArray)+1")
+                print ("len(sigma_gas) =  ", length_veldisp_gas)
         else:
             vd_gas = veldisp_gas
         tQ = ToomreQ(vd_gas,freqep,sgas) #calculate Toomre Q
@@ -286,7 +286,7 @@ def spiralArmsTimescalePerBin(R_array, V_array, Omega_P, m):
             elif length_Omega_P == len(R_array) - 1:
                 O_p = Omega_P[i]
             else:
-                print "Omega_P (pattern speed) must either be a floating point value or an array with length len(shearArray) or len(shearArray)+1!"
+                print ("Omega_P (pattern speed) must either be a floating point value or an array with length len(shearArray) or len(shearArray)+1!")
         else:
             O_p = Omega_P
         tsa.append(spiralArmTimescale(Omega, O_p, m))
