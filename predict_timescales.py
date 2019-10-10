@@ -23,19 +23,19 @@ prob_cc = 0.5
 
 #Calculate the average timescale for cloud-cloud collisions across a galaxy with no spiral arms:
 tavg = tt.calculateGalaxyWideTimescale(prob_cc, v_rebinned, r_rebinned, stellarSurfaceDensity, gasSurfaceDensity, veldispStar, veldispGas)
-print "mean tiemscale over galaxy: ",tavg
+print("mean tiemscale over galaxy: ",tavg)
 
 #Calculate the free-fall timescale for len(v_rebinned) -1 bins
 tff_array = tt.freeFallTimePerBin(v_rebinned,r_rebinned,stellarSurfaceDensity,gasSurfaceDensity,veldispStar,veldispGas)
-print tff_array
+print(tff_array)
 
 #Calculate the cloud-cloud collision timescale across the same rane of bins:
 tcc_array = tt.couclcloudCollisionTimePerBin(veldispGas,gasSurfaceDensity,r_rebinned,v_rebinned,prob_cc)
-print tcc_array
+print(tcc_array)
 
 #And for epicyclic perturbations
 tep_array = tt.epicyclicPerturbationTimescalePerBin(r_rebinned,v_rebinned)
-print tep_array
+print(tep_array)
 
 #spiral arms timescale (in this case we have no spiral arms):
 #spiralArmTimescale(Omega,Omega_P,m) 
@@ -47,13 +47,13 @@ tspa_array = tt.spiralArmsTimescalePerBin(r_rebinned,v_rebinned,Omega_P,m)
 
 #Shear:
 tB_array = tt.shearTimescalePerBin(r_rebinned,v_rebinned)
-print tB_array
+print(tB_array)
 
 tspa_array = tt.spiralArmsTimescalePerBin(r_rebinned,v_rebinned,0.05,1)
 
 #Combine these timescales:
 t_array = tt.combineTimescalesPerBin(tff_array,tcc_array,tep_array,tspa_array,tB_array)
-print t_array
+print(t_array)
 
 #Convert shear timescale into something positive for plotting:
 for i in range(len(tB_array)):
@@ -96,7 +96,7 @@ tB_array = tt.shearTimescalePerBin(r_rebinned,v_rebinned)
 tspa_array = tt.spiralArmsTimescalePerBin(r_rebinned,v_rebinned,(50./1000),1) #50 / 1000 comes from pattern speed of 40km/s / kpc
 
 t_array = tt.combineTimescalesPerBin(tff_array,tcc_array,tep_array,tspa_array,tB_array)
-print t_array
+print(t_array)
 for i in range(len(tB_array)):
     tB_array[i] = -1.0 * tB_array[i]
 # plt.close()

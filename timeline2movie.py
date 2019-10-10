@@ -4,7 +4,7 @@
 #This script makes use of img_scale.py, written by Min-Su Shin, Department of Astrophysical Sciences, Princeton University (https://astromsshin.github.io/science/code/Python_fits_image/index.html)
 #img_scale.py is available at http://www.sciserver.org/wp-content/uploads/2016/04/img_scale.py_.txt
 #Notes to the user:
-#The timeline file MUST take the form (including a 1 line header):
+#The timeline file MUST take the form (including a 1 line header), e.g.:
 #file, t_start,t_end,scale_min,scale_max, tracer name
 #lmc_hi_Karl_fcalJy_rmpSHASSA.fits, 0, 59, 0, 3.28789e+19, HI
 #
