@@ -46,7 +46,7 @@ stellar_surface_density_profile = stellar_surface_density_profile * stellarSurfa
 #We can then calculate a new freefall timescale array using surface density profiles of both stars and gas:
 tff_array = tt.freeFallTimePerBin(v_rebinned,r_rebinned,stellar_surface_density_profile,gas_surface_densities,veldispStar,veldispGas)
 #We then can then calculate the other timescales per bin:
-tcc_array = tt.couclcloudCollisionTimePerBin(veldispGas,gas_surface_densities,r_rebinned,v_rebinned,prob_cc)
+tcc_array = tt.cloudcloudCollisionTimePerBin(veldispGas,gas_surface_densities,r_rebinned,v_rebinned,prob_cc)
 tep_array = tt.epicyclicPerturbationTimescalePerBin(r_rebinned,v_rebinned)
 tB_array = tt.shearTimescalePerBin(r_rebinned,v_rebinned)
 tspa_array = tt.spiralArmsTimescalePerBin(r_rebinned,v_rebinned,(40./1000),1) #40 / 1000 comes from pattern speed of 40km/s / kpc (Dottori1996). Also possible is 21 +/- 3 km/s/kpc from Shimizu 2012
